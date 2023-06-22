@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<head>
+    <title>5 задание</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://threejs.org/build/three.module.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+		import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js'
+		import { TeapotGeometry } from 'https://threejs.org/examples/jsm/geometries/TeapotGeometry.js';
+
+		var camera, scene, renderer;
+		var controls;
+		var ambientLight, light;
+		init();
+		animate();
+
+		function init() {
+
+			var container = document.createElement( 'div' );
+			document.body.appendChild( container );
+
+			// CAMERA
+			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 5000 );
+			camera.position.set( 300, 700, 1200 );
+
+			// LIGHTS
+			ambientLight = new THREE.AmbientLight( 0x333333 );	// 0.2
+
+			light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
+			light.position.set( 1, 1, 1 );				
+			// direction is set in GUI
+
+			// RENDERER
+			renderer = new THREE.WebGLRenderer( { antialias: true } );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			container.appendChild( renderer.domElement );
+
+			// EVENTS
+			window.addEventListener( 'resize', onWindowResize, false );
+
+			// CONTROLS
+			controls = new OrbitControls( camera, renderer.domElement );
+			controls.addEventListener( 'change', render );
+			controls.rotateSpeed = 0.5; 
+			controls.enableZoom = true;  
+			controls.zoomSpeed = 0.5;  
+
+			controls.minDistance = 500;
+			controls.maxDistance = 2500;
+			
+			controls.enableDamping = true;
+
+			// scene itself
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color( 'white' );
+			
+            scene.add( ambientLight );
+			scene.add( light );
+            
+            //КОНУС
+            var radiusTop = 0; var radiusBottom = 25;
+            var heigth = 100; var segments = 100;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#36BBCE" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -400, 50, 100 );
+            scene.add( piramida );
+                
+            //ЖЕЛТЫЙ ШЕСТИГРАНИК
+            var radiusTop = 25; var radiusBottom = 25;
+            var heigth = 120; var segments = 6;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "yellow" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -380, 60, 10 );
+            piramida.rotation.y = 10;
+            scene.add( piramida );
+
+            //САЛАТАВЫЙ ЦИЛИНДР
+            var radiusTop = 25; var radiusBottom = 25;
+            var heigth = 100; var segments = 100;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#98ED00" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -335, 50, 60 );
+            scene.add( piramida );
+
+            //ТЕМНО ЖЕЛТЫЙ ПЯТИГРАНИК
+            var radiusTop = 25; var radiusBottom = 25;
+            var heigth = 120; var segments = 5;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#BBBE30" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -300, 60, -10 );
+            scene.add( piramida );
+
+            //СИНЯЯ СФЕРА
+            var geometry = new THREE.SphereGeometry(30, 50, 50); 
+            var material = new THREE.MeshPhongMaterial( { color: "#0E51A7" } );
+            var Sphere1 = new THREE.Mesh( geometry, material );
+            Sphere1.position.set(-300, 30, 110);
+            scene.add( Sphere1 );	
+
+            //КРАСНЫЙ КУБ
+            var geometry = new THREE.BoxGeometry( 60, 60, 60 );
+            var material = new THREE.MeshPhongMaterial( { color: "#FF0000" } );
+            var Cube = new THREE.Mesh( geometry, material );
+            Cube.position.set(-240, 30, 40);
+            scene.add( Cube );
+
+            //РОЗОВАЯ ПИРАМИДА
+            var radiusTop = 0; var radiusBottom = 30;
+            var heigth = 50; var segments = 4;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#E6399B" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -220, 25, 110 );
+            scene.add( piramida );
+
+            //ЗЕЛЕНАЯ ПИРАМИДА
+            var radiusTop = 0; var radiusBottom = 35;
+            var heigth = 100; var segments = 4;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#2F8F00" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -160, 50, 80 );
+            piramida.rotation.y = 10;
+            scene.add( piramida );
+
+            //СИНЯЯ ПИРАМИДА
+            var radiusTop = 0; var radiusBottom = 35;
+            var heigth = 90; var segments = 6;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#0D58A6" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -80, 45, 90 );
+            piramida.rotation.y = 10;
+            scene.add( piramida );
+
+            //КРАСНАЯ ПИРАМИДА
+            var radiusTop = 0; var radiusBottom = 35;
+            var heigth = 120; var segments = 6;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#FF0000" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -190, 60, -20 );
+            scene.add( piramida );
+
+            //ОРАНЖЕВАЯ ПИРАМИДА
+            var radiusTop = 35; var radiusBottom = 35;
+            var heigth = 120; var segments = 3;
+            var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, heigth, segments );
+            var material = new THREE.MeshPhongMaterial( { color: "#FF9000" } );
+            var piramida = new THREE.Mesh( geometry, material );
+            piramida.position.set( -120, 60, 15 );
+            scene.add( piramida );
+            
+            //ЧАЙНИК
+            var geometry = new TeapotGeometry( 30 );
+			var material = new THREE.MeshPhongMaterial( { color: 0xffccff } );	
+			var teapot = new THREE.Mesh( geometry, material );
+			teapot.position.set( -300, 150, -18 ); 					
+			scene.add( teapot );
+            
+            const helper = new THREE.GridHelper( 1000, 100 );
+			//helper.rotation.x = Math.PI / 2;
+			scene.add( helper );
+        }
+
+        // EVENT HANDLERS
+
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize( window.innerWidth, window.innerHeight );
+
+        }
+
+        //
+
+        function animate() {
+
+            requestAnimationFrame( animate );
+            controls.update(); //
+            render();
+
+        }
+
+        function render() {
+
+            renderer.render( scene, camera );
+
+        }		
+    </script>
+</body>
+
